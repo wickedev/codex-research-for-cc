@@ -5,13 +5,13 @@
   },
   "metadata": {
     "description": "Codex-judged pre-orchestration gate for Claude Code's built-in /deep-research workflow.",
-    "version": "0.1.0"
+    "version": "0.1.1"
   },
   "plugins": [
     {
       "name": "researchkeeper",
       "description": "Deep-research quality gate: before the workflow fans out, the research question is enriched by a brief protocol and reviewed by Codex, so no angle is silently missing from the orchestration.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "author": {
         "name": "Ryan"
       },
