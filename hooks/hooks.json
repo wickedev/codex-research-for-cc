@@ -1,0 +1,41 @@
+{
+  "description": "Codex research gate: enforces a research-brief protocol on deep-research requests and reviews the research question before the workflow fans out. Optional experimental gate on the Scope agent's angle decomposition.",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/prompt-hook.mjs\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Workflow",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/question-gate-hook.mjs\"",
+            "timeout": 900,
+            "statusMessage": "Codex is reviewing the research question…"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/scope-gate-hook.mjs\"",
+            "timeout": 900,
+            "statusMessage": "Codex is reviewing the search-angle decomposition…"
+          }
+        ]
+      }
+    ]
+  }
+}
