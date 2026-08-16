@@ -35,6 +35,7 @@ import { parseVerdict } from "./lib/verdict.mjs";
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const PROMPT_PATH = path.join(SCRIPT_DIR, "..", "prompts", "question-review.md");
+const BRIEF_PATH = path.join(SCRIPT_DIR, "..", "prompts", "brief-note.md");
 const JUDGE_TIMEOUT_MS = 10 * 60 * 1000;
 const JUDGE_ERROR_CAP = 3;
 
@@ -83,12 +84,24 @@ function resolveQuestion(toolInput) {
 }
 
 function reviseReason(feedback, iteration, maxIterations) {
+  // On the first denial, ship the full brief protocol along with the fixes:
+  // this launch may have been caught only here (the UserPromptSubmit keyword
+  // layer is deliberately narrow), and the workflow-start catch must be
+  // self-sufficient — Claude should not need to have seen the protocol before.
+  let brief = "";
+  if (iteration === 1) {
+    try {
+      brief = `\n\nFull protocol for reference:\n${fs.readFileSync(BRIEF_PATH, "utf8").trim()}`;
+    } catch {
+      // the fixes alone are still actionable
+    }
+  }
   return (
     `Codex research-question review (iteration ${iteration}/${maxIterations}): the question was ` +
     `NOT approved for fan-out. An independent reviewer found the gaps below. The workflow's ` +
     `Scope agent reads the question verbatim, so fold each fix into the question text itself, ` +
     `then call the Workflow tool again with the enriched question. Preserve the user's intent, ` +
-    `do not narrow the scope, do not ask the user, and do not abandon the research.\n\n${feedback}`
+    `do not narrow the scope, do not ask the user, and do not abandon the research.\n\n${feedback}${brief}`
   );
 }
 
