@@ -17,8 +17,8 @@
 
 import crypto from "node:crypto";
 import fs from "node:fs";
+import { readStdinSync } from "./lib/stdin.mjs";
 import path from "node:path";
-import process from "node:process";
 import { fileURLToPath } from "node:url";
 
 import { codexAvailable, runCodexJudge } from "./lib/codex.mjs";
@@ -40,7 +40,7 @@ const JUDGE_TIMEOUT_MS = 10 * 60 * 1000;
 const JUDGE_ERROR_CAP = 3;
 
 function readHookInput() {
-  const raw = fs.readFileSync(0, "utf8").trim();
+  const raw = readStdinSync().trim();
   const debugPath = process.env.RESEARCHKEEPER_DEBUG_INPUT;
   if (debugPath && raw) {
     try {

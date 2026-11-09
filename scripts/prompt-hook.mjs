@@ -6,8 +6,8 @@
 // is what actually reaches the workflow's Scope agent.
 
 import fs from "node:fs";
+import { readStdinSync } from "./lib/stdin.mjs";
 import path from "node:path";
-import process from "node:process";
 import { fileURLToPath } from "node:url";
 
 import { readConfig } from "./lib/state.mjs";
@@ -21,7 +21,7 @@ const NOTE_PATH = path.join(SCRIPT_DIR, "..", "prompts", "brief-note.md");
 const RESEARCH_INTENT = /(^|\s)\/deep-research\b|deep[\s-]?research|딥\s*리서치/i;
 
 function main() {
-  const raw = fs.readFileSync(0, "utf8").trim();
+  const raw = readStdinSync().trim();
   const input = raw ? JSON.parse(raw) : {};
 
   if (!readConfig().enabled) {

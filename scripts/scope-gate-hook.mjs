@@ -19,8 +19,8 @@
 // session; every failure path lets the agent finish.
 
 import fs from "node:fs";
+import { readStdinSync } from "./lib/stdin.mjs";
 import path from "node:path";
-import process from "node:process";
 import { fileURLToPath } from "node:url";
 
 import { codexAvailable, runCodexJudge } from "./lib/codex.mjs";
@@ -39,7 +39,7 @@ const PROMPT_PATH = path.join(SCRIPT_DIR, "..", "prompts", "scope-review.md");
 const JUDGE_TIMEOUT_MS = 5 * 60 * 1000;
 
 function readHookInput() {
-  const raw = fs.readFileSync(0, "utf8").trim();
+  const raw = readStdinSync().trim();
   const debugPath = process.env.RESEARCHKEEPER_DEBUG_INPUT;
   if (debugPath && raw) {
     try {

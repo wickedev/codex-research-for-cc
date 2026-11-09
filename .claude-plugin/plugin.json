@@ -1,6 +1,6 @@
 {
   "name": "researchkeeper",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Researchkeeper for the built-in /deep-research workflow: injects a research-brief protocol when research is requested, and has Codex review the research question before the workflow's fan-out starts. A question with missing angles is sent back with concrete fixes; only a reviewed question reaches the Scope agent.",
   "author": {
     "name": "Ryan"
